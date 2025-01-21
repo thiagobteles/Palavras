@@ -4,11 +4,21 @@ var xQuantidade = Convert.ToInt32(Console.ReadLine());
 Console.WriteLine("Quantidade mínima? ");
 var xQuantidadeMinima = Convert.ToInt32(Console.ReadLine());
 
-var xDicionario = new Dictionary<int, string>();
-for (var contador = 0; contador < xQuantidade; contador++)
+var xDicionario = new Dictionary<int, char>();
+Console.WriteLine($"Informe todas as letras: ");
+var xLetras = Console.ReadLine();
+
+if (xLetras != null && xLetras.Length >= xQuantidade)
 {
-    Console.WriteLine($"Informe a {contador + 1}ª letra: ");
-    xDicionario.Add(contador + 1, Console.ReadLine() ?? "");
+    for (var contador = 0; contador < xQuantidade; contador++)
+    {   
+    
+        xDicionario.Add(contador + 1, xLetras[contador]);
+    }
+}
+else
+{
+    Console.WriteLine($"Falha no momento de informar todas as letras...");
 }
 
 var xTodasCombinacoes = new List<int>();
@@ -44,7 +54,7 @@ for (var contador = xQuantidadeMinima; contador <= xQuantidade; contador++)
 Console.WriteLine("Digite alguma coisa para fechar a aplicação");
 Console.ReadKey();
 
-static List<int> ObterTodasCombinacoes(int aQuantidadeCaracter, Dictionary<int, string> aDicionario)
+static List<int> ObterTodasCombinacoes(int aQuantidadeCaracter, Dictionary<int, char> aDicionario)
 {
     var xListaFinal = aDicionario.Select(x => x.Key).ToList();
     var xContador = xListaFinal.Count;
@@ -69,8 +79,6 @@ static List<int> ObterTodasCombinacoes(int aQuantidadeCaracter, Dictionary<int, 
     return xListaFinal;
 }
 
-
-
 static async Task<List<string>> ObterPalavrasValidasAsync(List<string> aListaCompleta)
 {
     var xExistentes = await File.ReadAllLinesAsync("palavras.txt");
@@ -90,10 +98,7 @@ static async Task<List<string>> ObterPalavrasValidasAsync(List<string> aListaCom
         }
     });
 
-    if (xPalavrasValidas != null && xPalavrasValidas.Count > 0)
-    {
-        return xPalavrasValidas.Distinct().ToList();
-    }
-
-    return [];
+    return xPalavrasValidas != null && xPalavrasValidas.Count > 0 
+        ? xPalavrasValidas.Distinct().ToList() 
+        : ([]);
 }
